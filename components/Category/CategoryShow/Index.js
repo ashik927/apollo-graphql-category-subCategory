@@ -6,34 +6,18 @@ import { gql, useMutation } from "@apollo/client";
 // import { useMutation } from "@apollo/react-hooks";
 
 var query_value =  gql`
-            mutation { 
-                updateCategory ( 
-                categoryUid: "C-JA72EM" 
-                category: { 
-                name: "TEST-101" 
-                } 
-                ) 
-                { 
-                message 
-                statusCode 
-                result { 
-                uid 
-                name 
-                parent { 
-                uid 
-                name 
-                } 
-                parents { 
-                uid 
-                name 
-                } 
-                isActive 
-                inActiveNote 
-                createdAt 
-                updatedAt 
-                } 
-                } 
-                }      
+mutation Mutation($category: updateCategoryCreateInput!, $categoryUid: String!) {
+    updateCategory(category: $category, categoryUid: $categoryUid) {
+      message
+      result {
+        name
+        parent {
+          name
+          uid
+        }
+      }
+    }
+  }   
     `
  const CategoryShow = (props) => {
      const dispatch = useDispatch()
@@ -42,10 +26,10 @@ var query_value =  gql`
      const [isIndex, setIsIndex] = useState(false);
      const [edit, setEdit] = useState([false]);
      const [formData , setFormData] = useState({});
-     debugger
-     const [mutate] = useMutation(query_value)
+     const [addArticle,{loading,data,error}] = useMutation(query_value)
 
      const selector =useSelector((state) => state)
+
     useEffect( () => {
         setAllCategory(selector.foo.foo)
         let editValue=[]
@@ -74,16 +58,25 @@ var query_value =  gql`
             name :value
         })
     }
-    
-    const handleUpdate = async (id , index) => {        
-        try {
-            const { data } = await mutate()
-        }
-          catch (e) {
-            setError(e)
-          }
+    const handleUpdate = async (id , index) => {
+         const name = formData.name
+        addArticle({variables:{
+             "category": {
+                "name": name
+              },
+              "categoryUid": id
+            
+        }}).then( (value) => {
+            console.log(value);
+        })
+        .catch( (e) => {
+            console.log(e);
+            // setFormError("An error occurred");
+        });
         
     }
+
+    // const [addTodo, { data, loading, error }] = useMutation(queryvalue);
 
     return (
         <Col md={12}>
@@ -117,7 +110,9 @@ var query_value =  gql`
                                      data?.parents?.length > 0 &&  data?.parents.map((parentValue , key)=>{
                                         return <>
                                         <Input className="form-control" readOnly="true" defaultValue={parentValue.name}></Input>
-                                      
+                                       {/* <AccordionHeader targetId={key}>
+                                           {parentValue.name}
+                                        </AccordionHeader> */}
                                         </>
                                      })
                                     }
@@ -138,7 +133,7 @@ var query_value =  gql`
                              :
                             <Input className="form-control mb-3 mt-3"  readOnly="true"  defaultValue={data.name}></Input>
                             }
-                            {/* <Button color="primary" onClick={(e)=>handleChangeEdit(e , index)}> Edit</Button> */}
+                            <Button color="primary" onClick={(e)=>handleChangeEdit(e , index)}> Edit</Button>
                             </>
                             }
                             </Col>
