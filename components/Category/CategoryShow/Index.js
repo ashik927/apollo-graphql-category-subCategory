@@ -15,9 +15,16 @@ mutation Mutation($category: updateCategoryCreateInput!, $categoryUid: String!) 
           name
           uid
         }
+        parents {
+          name
+          uid
+        }
+        uid
+        updatedAt
+        isActive
       }
     }
-  }   
+  } 
     `
  const CategoryShow = (props) => {
      const dispatch = useDispatch()
@@ -46,7 +53,6 @@ mutation Mutation($category: updateCategoryCreateInput!, $categoryUid: String!) 
     } ;
 
     const handleChangeEdit = (e,index) => {
-        // debugger
         let editValue = [...edit]
         editValue.splice(index,1,true)
          setEdit(editValue)
@@ -68,6 +74,13 @@ mutation Mutation($category: updateCategoryCreateInput!, $categoryUid: String!) 
             
         }}).then( (value) => {
             console.log(value);
+            let categoryValue = value?.data?.updateCategory?.result
+            let allCategoryValue = [...allCategory];
+            allCategoryValue.splice(index,1,categoryValue)
+            setAllCategory(allCategoryValue)
+            let editValue = [...edit]
+            editValue.splice(index,1,false)
+            setEdit(editValue)
         })
         .catch( (e) => {
             console.log(e);
@@ -95,8 +108,20 @@ mutation Mutation($category: updateCategoryCreateInput!, $categoryUid: String!) 
                                 <AccordionItem>
                                     
                                 <AccordionHeader targetId={index}>
-                                    {data.name}
+                                    {
+                                         edit[index] ?
+                                        <>
+                                        <Input className="form-control mb-3 mt-3" name='categoryName' onChange={(e)=>handleChange(e)}   defaultValue={data.name}></Input>
+                                        <Button color="primary" className='m-2 p-2' onClick={(e)=>handleUpdate(data.uid, index)}> Update</Button>
+                                        </>
+                                     :
+                                      <>
+                                      {data.name}
+                                      </>
+                                    }
                                 </AccordionHeader>
+                                <Button color="primary" className='m-3' onClick={(e)=>handleChangeEdit(e , index)}> Edit</Button>
+
                                 <AccordionBody accordionId={index}>
                                     {
                                     data?.parent?.length > 0 ? 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FOO, ISMOBILE } from "../actionTypes";
+import { FOO, ISMOBILE , CATEGORY_UPDATE } from "../actionTypes";
 import { gql , useMutation } from "@apollo/client";
 import client from "../../apollo-client";
 
@@ -46,42 +46,9 @@ export const getCategory = () => async (dispatch) =>{
 
 
 
-// export const updateCategory = () => async (id , value) =>{
-//   const query =  gql`
-//   mutation { 
-//     updateCategory ( 
-//     categoryUid: "C-JA72EM" 
-//     category: { 
-//     name: "TEST-101" 
-//     } 
-//     ) 
-//     { 
-//     message 
-//     statusCode 
-//     result { 
-//     uid 
-//     name 
-//     parent { 
-//     uid 
-//     name 
-//     } 
-//     parents { 
-//     uid 
-//     name 
-//     } 
-//     isActive 
-//     inActiveNote 
-//     createdAt 
-//     updatedAt 
-//     } 
-//     } 
-//     }
-      
-//     `
-  
-//   const [toggleTodoMutation] = useMutation(query);
-// dispatch({ type: FOO, payload: data.getCategories.result.categories })
-// }
+export const updateCategory = () => async (dispatch,value) =>{
+  dispatch({ type: CATEGORY_UPDATE, payload: value })
+}
   
 
 

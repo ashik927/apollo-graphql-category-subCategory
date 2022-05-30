@@ -1,4 +1,4 @@
-import { FOO, ISMOBILE } from "../actionTypes";
+import { FOO, ISMOBILE,CATEGORY_UPDATE } from "../actionTypes";
 import { HYDRATE } from "next-redux-wrapper";
 const reducer = (state = { foo: "",isMobile:false }, action) => {
   switch (action.type) {
@@ -8,6 +8,9 @@ const reducer = (state = { foo: "",isMobile:false }, action) => {
         ...action.payload,
       };
     case FOO:
+      return { ...state, foo: action.payload };
+    case CATEGORY_UPDATE:
+      debugger
       return { ...state, foo: action.payload };
     case ISMOBILE:
       return { ...state, isMobile: action.payload };
