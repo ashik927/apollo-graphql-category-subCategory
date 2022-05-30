@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UncontrolledAccordion, AccordionItem, Button , AccordionHeader, AccordionBody, Row, Col, Input } from 'reactstrap';
 import { updateCategory } from '../../../redux/actions/fooActions';
 import { gql, useMutation } from "@apollo/client";
-// import { useMutation } from "@apollo/react-hooks";
+import Swal from 'sweetalert2';
 
 var query_value =  gql`
 mutation Mutation($category: updateCategoryCreateInput!, $categoryUid: String!) {
@@ -33,7 +33,7 @@ mutation Mutation($category: updateCategoryCreateInput!, $categoryUid: String!) 
      const [isIndex, setIsIndex] = useState(false);
      const [edit, setEdit] = useState([false]);
      const [formData , setFormData] = useState({});
-     const [addArticle,{loading,data,error}] = useMutation(query_value)
+     const [categoryUpdate,{loading,data,error}] = useMutation(query_value)
 
      const selector =useSelector((state) => state)
 
@@ -66,7 +66,7 @@ mutation Mutation($category: updateCategoryCreateInput!, $categoryUid: String!) 
     }
     const handleUpdate = async (id , index) => {
          const name = formData.name
-        addArticle({variables:{
+        categoryUpdate({variables:{
              "category": {
                 "name": name
               },
@@ -81,6 +81,11 @@ mutation Mutation($category: updateCategoryCreateInput!, $categoryUid: String!) 
             let editValue = [...edit]
             editValue.splice(index,1,false)
             setEdit(editValue)
+            Swal.fire(
+                'Thanks!',
+                'Categry Update Successfully',
+                'success'
+              ) 
         })
         .catch( (e) => {
             console.log(e);
