@@ -4,7 +4,7 @@ import { gql , useMutation } from "@apollo/client";
 import client from "../../apollo-client";
 
 
-export const getPosts = () => async (dispatch) =>{
+export const getCategory = () => async (dispatch) =>{
     const { data } = await client.query({
       query: gql`
       { 
@@ -41,50 +41,47 @@ export const getPosts = () => async (dispatch) =>{
              
       `,
     });
-  console.log(data)
   dispatch({ type: FOO, payload: data.getCategories.result.categories })
 }
 
 
 
-export const updateCategory = () => async (id , value) =>{
-  const query =  gql`
-  mutation { 
-    updateCategory ( 
-    categoryUid: "C-JA72EM" 
-    category: { 
-    name: "TEST-101" 
-    } 
-    ) 
-    { 
-    message 
-    statusCode 
-    result { 
-    uid 
-    name 
-    parent { 
-    uid 
-    name 
-    } 
-    parents { 
-    uid 
-    name 
-    } 
-    isActive 
-    inActiveNote 
-    createdAt 
-    updatedAt 
-    } 
-    } 
-    }
+// export const updateCategory = () => async (id , value) =>{
+//   const query =  gql`
+//   mutation { 
+//     updateCategory ( 
+//     categoryUid: "C-JA72EM" 
+//     category: { 
+//     name: "TEST-101" 
+//     } 
+//     ) 
+//     { 
+//     message 
+//     statusCode 
+//     result { 
+//     uid 
+//     name 
+//     parent { 
+//     uid 
+//     name 
+//     } 
+//     parents { 
+//     uid 
+//     name 
+//     } 
+//     isActive 
+//     inActiveNote 
+//     createdAt 
+//     updatedAt 
+//     } 
+//     } 
+//     }
       
-    `
+//     `
   
-  const [toggleTodoMutation] = useMutation(query);
-  debugger
-console.log(toggleTodoMutation)
-dispatch({ type: FOO, payload: data.getCategories.result.categories })
-}
+//   const [toggleTodoMutation] = useMutation(query);
+// dispatch({ type: FOO, payload: data.getCategories.result.categories })
+// }
   
 
 
